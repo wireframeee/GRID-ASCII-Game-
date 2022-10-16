@@ -11,5 +11,5 @@ and there's no indicator for what direction a bullet is moving
 
 Spend too much time not moving and you'll forget if the bullet in front of you was heading at you or just moving past
 
-A wierd casual strategy game to pass the time
+A wierd casual strategy game to pass the time. 
 See if you can control the GRID
