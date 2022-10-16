@@ -2,8 +2,10 @@
 
 A free ascii game about dodging bullets that come at you from each side
 //sounds easy enough?
+
 but the bullets move only when you move
 //wait that's even easier?
+
 and there's no indicator for what direction a bullet is moving
 //wait what?
 
