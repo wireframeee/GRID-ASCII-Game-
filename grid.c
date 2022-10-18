@@ -24,54 +24,58 @@ char screen[10][40] = {
 
                     //------------------------ funtion to that moves the player
 void move() {
-    char inp = getch();
-                    //------------------------ only allow 'w/a/s/d' as input, prevents other keys from triggering next frame
-    if (inp == 'w' || inp == 'a' || inp == 's' || inp == 'd') {
-                    //------------------------ switch case that moves player in the appropriate direction and updates player coords
-        switch (inp) {
-        case 'w':
-            if (px == 1) {
+    int f = 1;
+    while (f == 1) {
+        char inp = getch();
+                        //------------------------ only allow 'w/a/s/d' as input, prevents other keys from triggering next frame
+        if (inp == 'w' || inp == 'a' || inp == 's' || inp == 'd') {
+                        //------------------------ switch case that moves player in the appropriate direction and updates player coords
+            switch (inp) {
+            case 'w':
+                if (px == 1) {
+                    break;
+                }
+                else {
+                    screen[px - 1][py] = 'X';
+                    screen[px][py] = '.';
+                    px = px - 1;
+                }
                 break;
-            }
-            else {
-                screen[px - 1][py] = 'X';
-                screen[px][py] = '.';
-                px = px - 1;
-            }
-            break;
 
-        case 'a':
-            if (py == 1) {
+            case 'a':
+                if (py == 1) {
+                    break;
+                }
+                else {
+                    screen[px][py - 1] = 'X';
+                    screen[px][py] = '.';
+                    py = py - 1;
+                }
                 break;
-            }
-            else {
-                screen[px][py - 1] = 'X';
-                screen[px][py] = '.';
-                py = py - 1;
-            }
-            break;
 
-        case 's':
-            if (px == 8) {
+            case 's':
+                if (px == 8) {
+                    break;
+                }
+                else {
+                    screen[px + 1][py] = 'X';
+                    screen[px][py] = '.';
+                    px = px + 1;
+                }
                 break;
-            }
-            else {
-                screen[px + 1][py] = 'X';
-                screen[px][py] = '.';
-                px = px + 1;
-            }
-            break;
 
-        case 'd':
-            if (py == 38) {
+            case 'd':
+                if (py == 38) {
+                    break;
+                }
+                else {
+                    screen[px][py + 1] = 'X';
+                    screen[px][py] = '.';
+                    py = py + 1;
+                }
                 break;
             }
-            else {
-                screen[px][py + 1] = 'X';
-                screen[px][py] = '.';
-                py = py + 1;
-            }
-            break;
+            f = 0;        
         }
     }
 }
@@ -118,47 +122,44 @@ void display() {
 
                     //------------------------ function to move all bullets on screen
 void update() {
-                    //------------------------ replaces 'i/j/k/l' with 't/f/g/h' to avoid moving the same bullet character repeatedly in the same frame
-    for (int x = 0; x < 10; x++) {
-        for (int y = 0; y < 40; y++) {
-            if (screen[x][y] == 'i') screen[x][y] = 't';
-            if (screen[x][y] == 'j') screen[x][y] = 'f';
-            if (screen[x][y] == 'k') screen[x][y] = 'g';
-            if (screen[x][y] == 'l') screen[x][y] = 'h';
-        }
-    }
+                    //------------------------ an underlay to store if a given bullet has moved
+    int uscreen[10][40] = {
+        {0000000000000000000000000000000000000000},
+        {0000000000000000000000000000000000000000},
+        {0000000000000000000000000000000000000000},
+        {0000000000000000000000000000000000000000},
+        {0000000000000000000000000000000000000000},
+        {0000000000000000000000000000000000000000},
+        {0000000000000000000000000000000000000000},
+        {0000000000000000000000000000000000000000},
+        {0000000000000000000000000000000000000000},
+        {0000000000000000000000000000000000000000},
+    };
                     //------------------------ moves bullet characters
-                    //------------------------ needs separate loops to define unique ranges for each bullet character to prevent game crash
-    for (int x = 0; x < 9; x++) {
-        for (int y = 0; y < 40; y++) {
-            if (screen[x][y] == 't') {
-                screen[x][y] = '.';
-                screen[x + 1][y] = 'i';
-            }
-        }
-    }
     for (int x = 0; x < 10; x++) {
-        for (int y = 0; y < 39; y++) {
-            if (screen[x][y] == 'f') {
-                screen[x][y] = '.';
-                screen[x][y + 1] = 'j';
-            }
-        }
-    }
-    for (int x = 1; x < 10; x++) {
         for (int y = 0; y < 40; y++) {
-            if (screen[x][y] == 'g') {
-                screen[x][y] = '.';
-                screen[x - 1][y] = 'k';
-            }
-        }
-    }
-    for (int x = 0; x < 10; x++) {
-        for (int y = 1; y < 40; y++) {
-            if (screen[x][y] == 'h') {
-                screen[x][y] = '.';
-                screen[x][y - 1] = 'l';
-            }
+            if (uscreen[x][y] == 0) {    
+                if ((screen[x][y] == 'i') && (x != 9)) {
+                    screen[x][y] = '.';
+                    screen[x + 1][y] = 'i';
+                    uscreen[x + 1][y] = 1;
+                }
+                if ((screen[x][y] == 'j') && (y != 39)) {
+                    screen[x][y] = '.';
+                    screen[x][y + 1] = 'j';
+                    uscreen[x][y + 1] = 1;
+                }
+                if ((screen[x][y] == 'k') && (x != 0)) {
+                    screen[x][y] = '.';
+                    screen[x - 1][y] = 'k';
+                    uscreen[x - 1][y] = 1;
+                }
+                if ((screen[x][y] == 'l') && (y != 0)) {
+                    screen[x][y] = '.';
+                    screen[x][y - 1] = 'l';
+                    uscreen[x][y - 1] = 1;
+                }
+            }    
         }
     }
 }
@@ -179,7 +180,7 @@ void boot() {
                     //------------------------ standard loop, but prints increasing numbers of columns to "animate" title screen
     for (int m = 0; m <= 45; m++) {
         system("cls");
-        printf("V1.1.1");
+        printf("V1.1.2");
         for (int x = 0; x <= 10; x++) {
             printf("\t\t\t");
             for (int y = 0; y <= m; y++) {
