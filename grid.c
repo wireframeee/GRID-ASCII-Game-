@@ -191,6 +191,7 @@ void boot() {
         }
     }
 }
+                    //------------------------ Function that beeps (maybe use it to create music in the future)
 void openm() {
     while (1)
     {
@@ -235,11 +236,11 @@ int main() {
 
     HANDLE Title, OpenM;
 
-    // make threads
+                    //------------------------ Make threads
     Title = CreateThread(NULL, 0, boot, NULL, 0, NULL);
     OpenM = CreateThread(NULL, 0, openm, NULL, 0, NULL);
 
-    // wait for them to finish
+                    //------------------------ Wait for them to finish
     WaitForSingleObject(Title, INFINITE);
     TerminateThread(OpenM, NULL);
 
