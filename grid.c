@@ -5,6 +5,7 @@ products of my own thinking.*/
 
 #include <stdio.h>
 #include <Windows.h>
+#include <math.h>
 #include <time.h>
 int px, py, score, hscore;
 
@@ -180,7 +181,7 @@ void boot() {
                     //------------------------ standard loop, but prints increasing numbers of columns to "animate" title screen
     for (int m = 0; m <= 45; m++) {
         system("cls");
-        printf("V1.1.2");
+        printf("V1.2.0");
         for (int x = 0; x <= 10; x++) {
             printf("\t\t\t");
             for (int y = 0; y <= m; y++) {
@@ -188,8 +189,15 @@ void boot() {
             }
             printf("\n");
         }
-        Sleep(0.1);
     }
+}
+void openm() {
+    while (1)
+    {
+        Beep(350,300);
+        Sleep(300);
+    }
+    
 }
 
                     //------------------------ structure used for defining console size
@@ -225,7 +233,16 @@ int main() {
     SMALL_RECT windowSize = {0, 0, 90, 30};
     SetConsoleWindowInfo(wHnd, 1, &windowSize);
 
-    boot();
+    HANDLE Title, OpenM;
+
+    // make threads
+    Title = CreateThread(NULL, 0, boot, NULL, 0, NULL);
+    OpenM = CreateThread(NULL, 0, openm, NULL, 0, NULL);
+
+    // wait for them to finish
+    WaitForSingleObject(Title, INFINITE);
+    TerminateThread(OpenM, NULL);
+
     printf("\n\n\n\t\t\t\t    PRESS ENTER TO BEGIN");
                     //------------------------ only allows 'ENTER' button to start game
     int i;
@@ -233,7 +250,7 @@ int main() {
     {
         i = getch();
     } while (i != 13); // 13 is the value for 'ENTER'
-    
+
     int reset = 1;
                     //------------------------ loop stays till user wants to exit in which case the value of reset will be changed
     while (reset = 1) {
@@ -265,6 +282,7 @@ int main() {
             spawnbullets();
             system("cls");
             display();
+            Beep(700,100);
                     //------------------------ checks if collision occurs (game over)
             flag = 0;
             for (int x = 0; x < 10; x++) {
@@ -273,7 +291,7 @@ int main() {
                 }
             }
         }
-
+        Beep(1000,500);
         system("cls");
                     //------------------------ saves externally if a new hi-score is made
         if (score > hscore) {
